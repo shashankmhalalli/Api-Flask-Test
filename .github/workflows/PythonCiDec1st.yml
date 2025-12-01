@@ -18,7 +18,9 @@ jobs:
    - name: Package build artifacts
      run: |
       mkdir staging
-      cp -r *.py staging/
+      cp application.py staging/
+   - name: List files before packaging
+     run: ls -R
    - name: Upload artifact
      uses: actions/upload-artifact@v5.0.0
      with:
