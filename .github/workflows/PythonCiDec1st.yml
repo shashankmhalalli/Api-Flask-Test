@@ -9,20 +9,34 @@ jobs:
   steps:
    - name: Checkout
      uses: actions/checkout@v6.0.0
-   - name: Setup Python
-     uses: actions/setup-python@v6.1.0
-     with: 
-      python-version: '3.9'
-   - name: Python Dependency Installation
-     uses: py-actions/py-dependency-install@v4
-   - name: Package build artifacts
+   - name: Install build tools
      run: |
-      mkdir staging
-      cp application.py staging/
-   - name: List files before packaging
-     run: ls -R
-   - name: Upload artifact
+      python -m pip install --upgrade pip
+      pip install build
+   - name: Build wheel
+     run: |
+      mkdir -p dist
+      python -m build --wheel --outdir dist
+   - name: Upload wheel artifact
      uses: actions/upload-artifact@v5.0.0
      with:
-      name: python-package
-      path: staging
+      name: python-wheel
+      path: dist/*.whl
+     
+#   - name: Setup Python
+#     uses: actions/setup-python@v6.1.0
+#     with: 
+#      python-version: '3.9'
+#   - name: Python Dependency Installation
+#     uses: py-actions/py-dependency-install@v4
+#   - name: Package build artifacts
+#     run: |
+#      mkdir staging
+#      cp application.py staging/
+#   - name: List files before packaging
+#     run: ls -R
+#   - name: Upload artifact
+#     uses: actions/upload-artifact@v5.0.0
+#     with:
+#      name: python-package
+#      path: staging
