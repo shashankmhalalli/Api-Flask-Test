@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flask-api-app"
+version = "0.1.0"
+description = "A RESTful Flask API with Swagger UI"
+authors = [{ name = "Shashank Halalli" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "flask",
+    "flask-restful",
+    "flask-cors",
+    "flask-swagger-ui"
+]
+
+[tool.setuptools]
+packages = ["resources", "util"]
+include-package-data = true
