@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-api-python-app
+  name: myapp
   labels:
-    app: flask-api-python-app
+    app: myapp
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: flask-api-python-app
+      app: myapp
   template:
     metadata:
       labels:
-        app: flask-api-python-app
+        app: myapp
     spec:
       containers:
-        - name: flask-api-python-app
-          image: karthikamn/flask-api-python-app:latest
+        - name: myapp
+          image: karthikamn/myapp:latest
           ports:
             - containerPort: 5000  # Adjust based on your app's listening port  
