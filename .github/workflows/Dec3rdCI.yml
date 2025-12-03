@@ -25,10 +25,10 @@ jobs:
       tags: |
        ${{secrets.DOCKER_USER}}/myflaskapp:latest
        ${{secrets.DOCKER_USER}}/myflaskapp:${{github.sha}}
-        - name: Setup Kubectl for kubernetes
-       uses: azure/setup-kubectl@v3
-       with:
-         version: 'latest'      
+   - name: Setup Kubectl for kubernetes
+     uses: azure/setup-kubectl@v3
+     with:
+      version: 'latest'      
    - name: Setup Minikube
      run: |
       minikube start
