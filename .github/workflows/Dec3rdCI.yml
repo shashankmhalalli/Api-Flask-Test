@@ -25,3 +25,21 @@ jobs:
       tags: |
        ${{secrets.DOCKER_USER}}/myflaskapp:latest
        ${{secrets.DOCKER_USER}}/myflaskapp:${{github.sha}}
+
+#- name: "Configure AWS Credentials" Action for GitHub Actions
+#  uses: aws-actions/configure-aws-credentials@v5.1.0
+#  with:
+#    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#    aws-region: ap-south-1
+#
+#- name: Amazon ECR "Login" Action for GitHub Actions
+#  uses: aws-actions/amazon-ecr-login@v2
+
+#- name: Build and push to ECR
+#  uses: docker/build-push-action@v6
+#  with:
+#    context: .
+#    push: true
+#    tags: ECR_URI/myapp:latest
+#
