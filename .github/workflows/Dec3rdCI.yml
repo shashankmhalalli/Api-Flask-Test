@@ -25,7 +25,18 @@ jobs:
       tags: |
        ${{secrets.DOCKER_USER}}/myflaskapp:latest
        ${{secrets.DOCKER_USER}}/myflaskapp:${{github.sha}}
-
+        - name: Setup Kubectl for kubernetes
+       uses: azure/setup-kubectl@v3
+       with:
+         version: 'latest'      
+   - name: Setup Minikube
+     run: |
+      minikube start
+      kubectl config use-context minikube
+   - name: Deploy to Single cluster k8s
+     run: |
+      kubectl apply -f k8s/deployment.yml
+      kubectl apply -f k8s/service.yml
 #- name: "Configure AWS Credentials" Action for GitHub Actions
 #  uses: aws-actions/configure-aws-credentials@v5.1.0
 #  with:
