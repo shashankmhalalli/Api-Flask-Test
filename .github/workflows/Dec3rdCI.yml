@@ -21,6 +21,7 @@ jobs:
    - name: Set image variables
      id: vars
      run: |
+       IMAGE_TAG="Latest"
        echo "IMAGE_TAG=Latest" >> $GITHUB_ENV
        echo "FULL_IMAGE=${{steps.login-ecr.outputs.registry}}/${{secrets.ECR_REPO}}:${{IMAGE_TAG}}" >> $GITHUB_ENV
    - name: Build Docker Image
@@ -31,7 +32,7 @@ jobs:
       docker push $FULL_IMAGE
    - name: Deploy to EKS
      run: |
-      aws eks update-kubeconfig --region ${{AWS_REGION}} --name ${{secrets.EKS_CLUSTER_NAME}}
+      aws eks update-kubeconfig --region ${{secrets.AWS_REGION}} --name ${{secrets.EKS_CLUSTER_NAME}}
    - name: Update kubernetes deployment image
      run: |
       sed -i "s|REPLACE_IMAGE|$FULL_IMAGE|g" k8s/deployment.yml
