@@ -39,7 +39,7 @@ jobs:
    - name: Apply manifests to EKS
      run: |
       kubectl apply -f k8s/deployment.yml --validate=false
-      kubectl apply -f k8s/service.yml || true
+      kubectl apply -f k8s/service.yml --validate=false || true
 
 #- name: Build and push to ECR
 #  uses: docker/build-push-action@v6
