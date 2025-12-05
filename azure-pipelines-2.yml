@@ -1,0 +1,17 @@
+trigger:
+- main
+
+pool:
+  name: TestPool1
+  vmImage: 'ubuntu-latest' 
+
+variables:
+  repositoryName: 'shashankmhalalli/myflaskapp' 
+
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'flask'
+    repository: $(repositoryName)
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
