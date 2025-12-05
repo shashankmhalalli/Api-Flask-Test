@@ -1,19 +1,30 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
 - main
 
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'd1084777-97da-4e85-8245-e59045ed643e'
+  imageRepository: 'myappflask'
+  containerRegistry: 'myappflask.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
 
 stages:
-  
 - stage: Build
-  displayName: Build stage
-  jobs:  
+  displayName: Build and push stage
+  jobs:
   - job: Build
-    displayName: Build job
+    displayName: Build
     pool:
       name: TestPool1
     steps:
@@ -21,13 +32,10 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         command: buildAndPush
-        repository: MyAppFlask
-        dockerfile: '**/Dockerfile'
-        containerRegistry: 'flask'
-        
-          
-    - task: PublishPipelineArtifact@1
-      inputs:
-        artifactName: 'manifests'
-        path: 'manifests'
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
 
