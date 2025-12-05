@@ -21,9 +21,9 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         command: buildAndPush
-        repository: KarthikaRepo
-        dockerfile: $(dockerfilePath)
-        containerRegistry: acr1
+        repository: MyAppFlask
+        dockerfile: '**/Dockerfile'
+        containerRegistry: 'flask'
         
           
     - task: PublishPipelineArtifact@1
