@@ -24,7 +24,7 @@ steps:
 # -----------------------------
 - script: |
     echo "$(ACR_PASSWORD)" | docker login myappflask.azurecr.io \
-      --username $(ACR_USERNAME) --password-stdin
+      --username $(ACR_USERNAME) --password $(ACR_PASSWORD)
   displayName: "Login to ACR"
 
 - script: |
