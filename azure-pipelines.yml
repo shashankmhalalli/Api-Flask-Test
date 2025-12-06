@@ -1,43 +1,45 @@
 trigger:
-  - main
+- main
 
 pool:
   name: TestPool1
 
 variables:
-- group: MyACRVariables
 - name: imageName
   value: MyFlaskApp
 
-
-
 steps:
-  - checkout: self
+- checkout: self
 
-  - script: |
-      echo "ACR_USERNAME = $(ACR_USERNAME)"
-    displayName: "Debug: Show ACR variables"
-  # -----------------------------
-  # Step 1: Login to ACR manually
-  # -----------------------------
-  - script: |
-      echo "$(ACR_PASSWORD)" | docker login myappflask.azurecr.io \
-        --username $(ACR_USERNAME) --password-stdin
-    displayName: "Login to ACR (manual)"
+# -----------------------------
+# Step 1: Debug variables (optional)
+# -----------------------------
+- script: |
+    echo "ACR_USERNAME = $(ACR_USERNAME)"
+    echo "ACR_PASSWORD = [REDACTED]"
+  displayName: "Debug: Show ACR variables"
 
-  # -----------------------------
-  # Step 2: Build Docker image
-  # -----------------------------
-  - script: |
-      docker build -t myappflask.azurecr.io/$(imageName):$(Build.BuildId) .
-      docker tag myappflask.azurecr.io/$(imageName):$(Build.BuildId) \
-                 myappflask.azurecr.io/$(imageName):latest
-    displayName: "Build Docker Image"
+# -----------------------------
+# Step 2: Login to ACR manually
+# -----------------------------
+- script: |
+    echo "$(ACR_PASSWORD)" | docker login myappflask.azurecr.io \
+      --username $(ACR_USERNAME) --password-stdin
+  displayName: "Login to ACR"
 
-  # -----------------------------
-  # Step 3: Push image to ACR
-  # -----------------------------
-  - script: |
-      docker push myappflask.azurecr.io/$(imageName):$(Build.BuildId)
-      docker push myappflask.azurecr.io/$(imageName):latest
-    displayName: "Push Docker Image"
+# -----------------------------
+# Step 3: Build Docker image
+# -----------------------------
+- script: |
+    docker build -t myappflask.azurecr.io/$(imageName):$(Build.BuildId) .
+    docker tag myappflask.azurecr.io/$(imageName):$(Build.BuildId) \
+               myappflask.azurecr.io/$(imageName):latest
+  displayName: "Build Docker Image"
+
+# -----------------------------
+# Step 4: Push image to ACR
+# -----------------------------
+- script: |
+    docker push myappflask.azurecr.io/$(imageName):$(Build.BuildId)
+    docker push myappflask.azurecr.io/$(imageName):latest
+  displayName: "Push Docker Image"
