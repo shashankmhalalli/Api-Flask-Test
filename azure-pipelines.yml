@@ -5,7 +5,7 @@ pool:
   name: TestPool1
 
 variables:
-- group: New variable group 06-Dec
+- group: MyACRVariables
 - name: imageName
   value: MyFlaskApp
 
