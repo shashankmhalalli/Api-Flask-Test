@@ -5,7 +5,9 @@ pool:
   name: TestPool1
 
 variables:
-  imageName: MyFlaskApp
+- group: New variable group 06-Dec
+- name: imageName
+  value: MyFlaskApp
 
 steps:
   - checkout: self
