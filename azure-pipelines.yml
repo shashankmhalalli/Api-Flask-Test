@@ -6,7 +6,7 @@ pool:
 
 variables:
 - name: imageName
-  value: myappflask
+  value: flaskapp
 
 steps:
 - checkout: self
@@ -26,6 +26,11 @@ steps:
     echo "$(ACR_PASSWORD)" | docker login myappflask.azurecr.io \
       --username $(ACR_USERNAME) --password-stdin
   displayName: "Login to ACR"
+
+- script: |
+    docker info
+    docker login myappflask.azurecr.io --username $(ACR_USERNAME) --password $(ACR_PASSWORD)
+  displayName: "Verify ACR Login"
 
 # -----------------------------
 # Step 3: Build Docker image
