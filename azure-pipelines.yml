@@ -1,41 +1,36 @@
-# Docker
-# Build and push an image to Azure Container Registry
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
-- main
+  - main
 
-resources:
-- repo: self
+pool:
+  name: TestPool1
 
 variables:
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'd1084777-97da-4e85-8245-e59045ed643e'
-  imageRepository: 'myappflask'
-  containerRegistry: 'myappflask.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(Build.BuildId)'
+  imageName: MyFlaskApp
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+steps:
+  - checkout: self
 
-stages:
-- stage: Build
-  displayName: Build and push stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      name: TestPool1
-    steps:
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+  # -----------------------------
+  # Step 1: Login to ACR manually
+  # -----------------------------
+  - script: |
+      echo "$(ACR_PASSWORD)" | docker login myappflask.azurecr.io \
+        --username $(ACR_USERNAME) --password-stdin
+    displayName: "Login to ACR (manual)"
 
+  # -----------------------------
+  # Step 2: Build Docker image
+  # -----------------------------
+  - script: |
+      docker build -t myappflask.azurecr.io/$(imageName):$(Build.BuildId) .
+      docker tag myappflask.azurecr.io/$(imageName):$(Build.BuildId) \
+                 myappflask.azurecr.io/$(imageName):latest
+    displayName: "Build Docker Image"
 
+  # -----------------------------
+  # Step 3: Push image to ACR
+  # -----------------------------
+  - script: |
+      docker push myappflask.azurecr.io/$(imageName):$(Build.BuildId)
+      docker push myappflask.azurecr.io/$(imageName):latest
+    displayName: "Push Docker Image"
