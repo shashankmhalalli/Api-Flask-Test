@@ -6,7 +6,7 @@ pool:
 
 variables:
 - name: imageName
-  value: MyFlaskApp
+  value: myappflask
 
 steps:
 - checkout: self
