@@ -9,9 +9,14 @@ variables:
 - name: imageName
   value: MyFlaskApp
 
+
+
 steps:
   - checkout: self
 
+  - script: |
+      echo "ACR_USERNAME = $(ACR_USERNAME)"
+    displayName: "Debug: Show ACR variables"
   # -----------------------------
   # Step 1: Login to ACR manually
   # -----------------------------
